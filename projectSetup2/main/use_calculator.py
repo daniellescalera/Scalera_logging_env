@@ -46,7 +46,6 @@ def main():
             # Create a calculation instance and add it to history
             calculation = Calculation(operation, float(num1), float(num2))
             CalculationHistory.add_calculation(calculation)
-            
             result = calculation.result
             print(f"✅ Result: {result}")
 

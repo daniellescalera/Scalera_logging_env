@@ -1,20 +1,34 @@
-from dotenv import load_dotenv
-import os
+"""
+Main module for the calculator application.
 
-#load enviornment variables from .env file
-load_dotenv()
+This script initializes the calculator, processes user input,
+and handles both arithmetic operations and predefined commands.
+"""
 
-#retrieve the ENVIRONMENT variable
-environment = os.getenv("ENVIRONMENT")
+import os  # Standard library imports
+from dotenv import load_dotenv  # Third-party imports
 
-print(f"Running in {environment} mode")
-"""importing all of the needed commands"""
+# Project-specific imports
 from calculator.calculations import Calculation
 from calculator.history import CalculationHistory
 from calculator import Calculator
 from calculator.logger import logger
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Retrieve the ENVIRONMENT variable
+environment = os.getenv("ENVIRONMENT")
+print(f"Running in {environment} mode")
+
 def main():
-    logger.info("Calculator program started.") # log when the program starts
+    """
+    Main function to run the calculator program.
+
+    This function initializes the calculator, prompts the user for input, 
+    executes commands or arithmetic operations, and logs all relevant information.
+    """
+    logger.info("Calculator program started.")  # Log when the program starts
 
     calculator = Calculator()  # Initialize the Calculator class with command handler
     calculator.start()
@@ -26,11 +40,11 @@ def main():
         print("Type 'exit' to quit.")
 
         user_input = input("Enter operation or command: ").strip().lower()
-        logger.info(f"User entered: {user_input} ") #log user input
+        logger.info(f"User entered: {user_input}")  # Log user input
 
         # Check if the input is a command
         if user_input in ["greet", "goodbye", "exit"]:
-            logger.info(f"Executing command: {user_input} ")
+            logger.info("User entered: %s", user_input)
             calculator.command_handler.execute_command(user_input)
             if user_input == "exit":
                 break
@@ -39,7 +53,7 @@ def main():
         # Handle arithmetic operations
         if user_input not in ["add", "subtract", "multiply", "divide"]:
             print("Invalid operation. Try again.")
-            logger.warning(f"Invalid operation attempted: {user_input} ")
+            logger.warning("Invalid operation attempted: %s", user_input)
             continue
 
         try:
@@ -51,14 +65,15 @@ def main():
 
             result = calculation.result
             print(f"Result: {calculation.result}")
-            logger.info(f"Calculation performed: {a} {user_input} {b} = {result}")
+            logger.info("Calculation performed: %s %s %s = %s", a, user_input, b, result)
+
 
         except ValueError:
             print("Invalid input. Please enter numeric values.")
             logger.error("User entered a non-numeric value")
         except ZeroDivisionError as e:
             print(e)
-            logger.error("Attempted divison by zero.")
+            logger.error("Attempted division by zero.")
 
 if __name__ == "__main__":
     main()
